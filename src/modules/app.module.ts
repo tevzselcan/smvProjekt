@@ -10,6 +10,7 @@ import { UsersModule } from './users/users.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/guards/jwt.guard';
 import { AuthModule } from './auth/auth.module';
+import { LoggerMiddleware } from 'middleware/logger.middleware';
 
 @Module({
   imports: [
@@ -24,5 +25,9 @@ import { AuthModule } from './auth/auth.module';
   controllers: [],
 })
 export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {}
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(LoggerMiddleware)
+      .forRoutes({ path: '*', method: RequestMethod.ALL });
+  }
 }
