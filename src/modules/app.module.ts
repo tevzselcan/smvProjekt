@@ -16,6 +16,7 @@ import { RolesModule } from './roles/roles.module';
 import { PermissionsModule } from './permissions/permissions.module';
 import { PerrmissionsGuard } from './permissions/guards/permissions.guard';
 import { SubjectsModule } from './subjects/subjects.module';
+import { AssignmentsModule } from './assignments/assignments.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { SubjectsModule } from './subjects/subjects.module';
     RolesModule,
     PermissionsModule,
     SubjectsModule,
+    AssignmentsModule,
   ],
   controllers: [],
   providers: [

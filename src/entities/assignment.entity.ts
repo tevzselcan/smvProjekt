@@ -1,4 +1,4 @@
-import { Entity, Column, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { Subject } from './subject.entity';
 import { Base } from './base.entity';
 
@@ -10,9 +10,13 @@ export class Assignment extends Base {
   @Column()
   description: string;
 
-  @Column()
-  due_date: Date;
+  @Column({ nullable: true })
+  file: string;
 
-  @ManyToOne(() => Subject, (subject) => subject.assignments)
-  subject: Subject;
+  @Column()
+  due_date: string;
+
+  @ManyToOne(() => Subject, { onDelete: 'SET NULL' })
+  @JoinColumn({ name: 'subject_id' })
+  subject: Subject | null;
 }

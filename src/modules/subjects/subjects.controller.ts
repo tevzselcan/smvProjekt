@@ -22,28 +22,28 @@ import { Subject } from 'entities/subject.entity';
 export class SubjectsController {
   constructor(private subjectsService: SubjectsService) {}
   @Get()
-  @HasPermission('subjects')
+  //@HasPermission('subjects')
   @HttpCode(HttpStatus.OK)
   async findAll(): Promise<Subject[]> {
     return this.subjectsService.findAll(['teachers', 'students']);
   }
 
   @Get('/paginated')
-  @HasPermission('subjects')
+  //@HasPermission('subjects')
   @HttpCode(HttpStatus.OK)
   async paginated(@Query('page') page: number): Promise<PaginatedResult> {
     return this.subjectsService.paginate(page, ['teachers', 'students']);
   }
 
   @Get(':id')
-  @HasPermission('subjects')
+  //@HasPermission('subjects')
   @HttpCode(HttpStatus.OK)
   async findOne(@Param('id') id: string): Promise<Subject> {
     return this.subjectsService.findById(id, ['teachers', 'students']);
   }
 
   @Post()
-  @HasPermission('subjects')
+  //@HasPermission('subjects')
   @HttpCode(HttpStatus.CREATED)
   async create(
     @Body() createSubjecteDto: CreateUpdateSubjectDto,
@@ -62,7 +62,7 @@ export class SubjectsController {
   }
 
   @Patch(':id')
-  @HasPermission('subjects')
+  //@HasPermission('subjects')
   @HttpCode(HttpStatus.OK)
   async update(
     @Param('id') id: string,
@@ -83,7 +83,7 @@ export class SubjectsController {
   }
 
   @Delete(':id')
-  @HasPermission('subjects')
+  //@HasPermission('subjects')
   @HttpCode(HttpStatus.OK)
   async remove(@Param('id') id: string): Promise<Subject> {
     return this.subjectsService.remove(id);

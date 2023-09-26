@@ -1,7 +1,6 @@
 import { Column, Entity, ManyToMany, JoinTable, OneToMany } from 'typeorm';
 import { Base } from './base.entity';
 import { User } from './user.entity';
-import { Assignment } from './assignment.entity';
 
 @Entity()
 export class Subject extends Base {
@@ -26,7 +25,4 @@ export class Subject extends Base {
     inverseJoinColumn: { name: 'user_id', referencedColumnName: 'id' },
   })
   students: User[];
-
-  @OneToMany(() => Assignment, (assignment) => assignment.subject)
-  assignments: Assignment[];
 }

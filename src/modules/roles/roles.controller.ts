@@ -23,28 +23,28 @@ import { ApiTags } from '@nestjs/swagger';
 export class RolesController {
   constructor(private rolesService: RolesService) {}
   @Get()
-  @HasPermission('roles')
+  //@HasPermission('roles')
   @HttpCode(HttpStatus.OK)
   async findAll(): Promise<Role[]> {
     return this.rolesService.findAll(['permissions']);
   }
 
   @Get('/paginated')
-  @HasPermission('roles')
+  //@HasPermission('roles')
   @HttpCode(HttpStatus.OK)
   async paginated(@Query('page') page: number): Promise<PaginatedResult> {
     return this.rolesService.paginate(page, ['permissions']);
   }
 
   @Get(':id')
-  @HasPermission('roles')
+  //@HasPermission('roles')
   @HttpCode(HttpStatus.OK)
   async findOne(@Param('id') id: string): Promise<Role> {
     return this.rolesService.findById(id, ['permissions']);
   }
 
   @Post()
-  @HasPermission('roles')
+  //@HasPermission('roles')
   @HttpCode(HttpStatus.CREATED)
   async create(
     @Body() createRoleDto: CreateUpdateRoleDto,
@@ -59,7 +59,7 @@ export class RolesController {
   }
 
   @Patch(':id')
-  @HasPermission('roles')
+  //@HasPermission('roles')
   @HttpCode(HttpStatus.OK)
   async update(
     @Param('id') id: string,
@@ -76,7 +76,7 @@ export class RolesController {
   }
 
   @Delete(':id')
-  @HasPermission('roles')
+  //@HasPermission('roles')
   @HttpCode(HttpStatus.OK)
   async remove(@Param('id') id: string): Promise<Role> {
     return this.rolesService.remove(id);

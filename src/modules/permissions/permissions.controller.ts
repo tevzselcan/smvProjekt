@@ -18,14 +18,14 @@ export class PermissionsController {
   constructor(private readonly permissionsService: PermissionsService) {}
 
   @Get()
-  @HasPermission('permissions')
+  //@HasPermission('permissions')
   @HttpCode(HttpStatus.OK)
   async findAll(): Promise<Permission[]> {
     return this.permissionsService.findAll();
   }
 
   @Post()
-  @HasPermission('permissions')
+  //@HasPermission('permissions')
   @HttpCode(HttpStatus.CREATED)
   async create(
     @Body() createPermissionDto: CreatePermissionDto,
