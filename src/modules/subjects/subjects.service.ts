@@ -61,4 +61,20 @@ export class SubjectsService extends AbstractService {
       );
     }
   }
+
+  async findAllSubjectsForStudent(studentId: string): Promise<Subject[]> {
+    return this.subjectsRepository
+      .createQueryBuilder('subject')
+      .innerJoinAndSelect('subject.students', 'student')
+      .where('student.id = :studentId', { studentId })
+      .getMany();
+  }
+
+  async findAllSubjectsForTeacher(teacherId: string): Promise<Subject[]> {
+    return this.subjectsRepository
+      .createQueryBuilder('subject')
+      .innerJoinAndSelect('subject.teachers', 'teacher')
+      .where('teacher.id = :teacherId', { teacherId })
+      .getMany();
+  }
 }

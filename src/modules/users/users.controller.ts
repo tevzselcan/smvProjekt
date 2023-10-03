@@ -38,6 +38,12 @@ export class UsersController {
     return this.userService.findById(id);
   }
 
+  @Get('subjects/:id')
+  @HttpCode(HttpStatus.OK)
+  async findSubjects(@Param('id') id: string) {
+    return this.userService.findById(id, ['subject']);
+  }
+
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() createUserDto: CreateUserDto): Promise<User> {

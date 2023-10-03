@@ -42,6 +42,20 @@ export class SubjectsController {
     return this.subjectsService.findById(id, ['teachers', 'students']);
   }
 
+  @Get('student/:id')
+  //@HasPermission('subjects')
+  @HttpCode(HttpStatus.OK)
+  async findStudentSubjects(@Param('id') id: string): Promise<Subject[]> {
+    return this.subjectsService.findAllSubjectsForStudent(id);
+  }
+
+  @Get('teacher/:id')
+  //@HasPermission('subjects')
+  @HttpCode(HttpStatus.OK)
+  async findTeacherSubjects(@Param('id') id: string): Promise<Subject[]> {
+    return this.subjectsService.findAllSubjectsForTeacher(id);
+  }
+
   @Post()
   //@HasPermission('subjects')
   @HttpCode(HttpStatus.CREATED)

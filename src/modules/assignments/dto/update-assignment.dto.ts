@@ -10,7 +10,6 @@ export class UpdateAssignmentDto {
   description?: string;
 
   @ApiProperty()
-  @IsNotEmpty()
   file?: string;
 
   @ApiProperty()

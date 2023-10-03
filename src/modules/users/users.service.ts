@@ -11,11 +11,13 @@ import { Repository } from 'typeorm';
 import { compareHash, hash } from 'utils/bcrypt';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { Subject } from 'entities/subject.entity';
 
 @Injectable()
 export class UsersService extends AbstractService {
   constructor(
-    @InjectRepository(User) private readonly userRepository: Repository<User>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
   ) {
     super(userRepository);
   }
@@ -74,10 +76,5 @@ export class UsersService extends AbstractService {
         'Something went wrong while updating the user.',
       );
     }
-  }
-
-  async updateUserImageId(id: string, avatar: string): Promise<User> {
-    const user = await this.findById(id);
-    return this.update(user.id, { avatar });
   }
 }
