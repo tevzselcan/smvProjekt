@@ -24,10 +24,6 @@ export class UpdateUserDto {
   role_id?: string;
 
   @ApiProperty({ required: false })
-  @IsOptional()
-  avatar?: string;
-
-  @ApiProperty({ required: false })
   @ValidateIf((o) => typeof o.password === 'string' && o.password.lenght > 0)
   @IsOptional()
   @Matches(/^(?=.*\d)[A-Za-z.\s_-]+[\w~@#$%^&*+=`|{}:;!.?"()[\]-]{6,}/, {

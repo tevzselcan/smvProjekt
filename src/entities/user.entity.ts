@@ -15,9 +15,6 @@ export class User extends Base {
   last_name: string;
 
   @Column({ nullable: true })
-  avatar: string;
-
-  @Column({ nullable: true })
   @Exclude()
   password: string;
 
