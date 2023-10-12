@@ -14,9 +14,28 @@ const validMimeTypes: validMimeType[] = [
   'image/png',
 ];
 
-export const saveFileToStorage: Options = {
+export const saveAssignmentFile: Options = {
   storage: diskStorage({
-    destination: './files',
+    destination: './files/assignments',
+    filename(req, file, callback) {
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+      const ext = extname(file.originalname);
+      const filename = `${uniqueSuffix}${ext}`;
+
+      callback(null, filename);
+    },
+  }),
+  fileFilter(req, file, callback) {
+    const allowedMimeTypes: validMimeType[] = validMimeTypes;
+    allowedMimeTypes.includes(file.mimetype as validMimeType)
+      ? callback(null, true)
+      : callback(null, false);
+  },
+};
+
+export const saveSubmissionFile: Options = {
+  storage: diskStorage({
+    destination: './files/submissions',
     filename(req, file, callback) {
       const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
       const ext = extname(file.originalname);

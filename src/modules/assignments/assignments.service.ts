@@ -43,6 +43,8 @@ export class AssignmentsService extends AbstractService {
       assignment.description = updateAssignmentsDto.description;
       assignment.due_date = updateAssignmentsDto.due_date;
       assignment.subject = updateAssignmentsDto.subject;
+      assignment.file = updateAssignmentsDto.file;
+      assignment.user = updateAssignmentsDto.user;
 
       return this.assignmentsRepository.save(assignment);
     } catch (error) {
@@ -56,5 +58,12 @@ export class AssignmentsService extends AbstractService {
   async updateAssignmentFile(id: string, file: string): Promise<Assignment> {
     const assignment = await this.findById(id);
     return this.update(assignment.id, { file });
+  }
+
+  async findAllAssignmentsForClass(subject_id: string): Promise<Assignment[]> {
+    return await this.assignmentsRepository.find({
+      where: { subject: { id: subject_id } },
+      relations: ['subject'],
+    });
   }
 }

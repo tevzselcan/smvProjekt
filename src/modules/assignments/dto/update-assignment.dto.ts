@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty } from 'class-validator';
 import { Subject } from 'entities/subject.entity';
+import { User } from 'entities/user.entity';
 
 export class UpdateAssignmentDto {
   @ApiProperty()
@@ -14,6 +15,9 @@ export class UpdateAssignmentDto {
 
   @ApiProperty()
   due_date?: string;
+
+  @ApiProperty()
+  user?: User;
 
   @ApiProperty()
   subject?: Subject;

@@ -28,13 +28,6 @@ export class SubjectsController {
     return this.subjectsService.findAll(['teachers', 'students']);
   }
 
-  @Get('/paginated')
-  //@HasPermission('subjects')
-  @HttpCode(HttpStatus.OK)
-  async paginated(@Query('page') page: number): Promise<PaginatedResult> {
-    return this.subjectsService.paginate(page, ['teachers', 'students']);
-  }
-
   @Get(':id')
   //@HasPermission('subjects')
   @HttpCode(HttpStatus.OK)

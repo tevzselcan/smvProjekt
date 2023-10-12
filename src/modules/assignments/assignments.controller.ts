@@ -25,7 +25,7 @@ import { CreateAssignmentDto } from './dto/create-assignment.dto';
 import {
   isFileExtensionSafe,
   removeFile,
-  saveFileToStorage,
+  saveAssignmentFile,
 } from 'helpers/fileStorage';
 import { join } from 'path';
 
@@ -37,21 +37,23 @@ export class AssignmentsController {
   //@HasPermission('assignments')
   @HttpCode(HttpStatus.OK)
   async findAll(): Promise<Assignment[]> {
-    return this.assignmentsService.findAll(['subject']);
-  }
-
-  @Get('/paginated')
-  //@HasPermission('assignments')
-  @HttpCode(HttpStatus.OK)
-  async paginated(@Query('page') page: number): Promise<PaginatedResult> {
-    return this.assignmentsService.paginate(page, ['subject']);
+    return this.assignmentsService.findAll(['user', 'subject']);
   }
 
   @Get(':id')
   //@HasPermission('assignments')
   @HttpCode(HttpStatus.OK)
   async findOne(@Param('id') id: string): Promise<Assignment> {
-    return this.assignmentsService.findById(id, ['subject']);
+    return this.assignmentsService.findById(id, ['user', 'subject']);
+  }
+
+  @Get('subject/:id')
+  //@HasPermission('assignments')
+  @HttpCode(HttpStatus.OK)
+  async findAssignmentsForSubject(
+    @Param('id') id: string,
+  ): Promise<Assignment[]> {
+    return this.assignmentsService.findAllAssignmentsForClass(id);
   }
 
   @Post()
@@ -64,7 +66,7 @@ export class AssignmentsController {
   }
 
   @Post('upload/:id')
-  @UseInterceptors(FileInterceptor('file', saveFileToStorage))
+  @UseInterceptors(FileInterceptor('file', saveAssignmentFile))
   @HttpCode(HttpStatus.CREATED)
   async upload(
     @UploadedFile() file: Express.Multer.File,
@@ -75,10 +77,11 @@ export class AssignmentsController {
     if (!filename)
       throw new BadRequestException('File must be a png or jpg/jpeg.');
 
-    const imagesFolderPath = join(process.cwd(), 'files');
+    const imagesFolderPath = join(process.cwd(), 'files/assignments');
     const fullImagePath = join(imagesFolderPath + '/' + file.filename);
     if (await isFileExtensionSafe(fullImagePath)) {
-      return this.assignmentsService.updateAssignmentFile(id, filename);
+      await this.assignmentsService.updateAssignmentFile(id, filename);
+      return await this.assignmentsService.findById(id);
     }
     removeFile(fullImagePath);
     throw new BadRequestException('File content does not match extension.');
