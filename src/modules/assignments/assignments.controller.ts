@@ -7,12 +7,16 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  NotFoundException,
   Param,
   Patch,
   Post,
   Query,
+  Res,
+  StreamableFile,
   UploadedFile,
   UseInterceptors,
+  Response,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { PaginatedResult } from 'interfaces/paginated-result.interface';
@@ -28,6 +32,7 @@ import {
   saveAssignmentFile,
 } from 'helpers/fileStorage';
 import { join } from 'path';
+import * as fs from 'fs';
 
 @ApiTags('assignments')
 @Controller('assignments')
@@ -85,6 +90,29 @@ export class AssignmentsController {
     }
     removeFile(fullImagePath);
     throw new BadRequestException('File content does not match extension.');
+  }
+
+  @Get('file/:id')
+  @HttpCode(HttpStatus.CREATED)
+  async getFile(@Param('id') id: string, @Response() res) {
+    const assignment = await this.assignmentsService.findById(id);
+
+    if (!assignment) {
+      throw new NotFoundException('Assignment not found');
+    }
+
+    const filePath = join(process.cwd(), 'files/assignments', assignment.file);
+
+    // Ensure the file exists
+    if (fs.existsSync(filePath)) {
+      res.setHeader(
+        'Content-Disposition',
+        `attachment; filename="${assignment.file}"`,
+      );
+      res.sendFile(filePath);
+    } else {
+      throw new NotFoundException('File not found');
+    }
   }
 
   @Patch(':id')

@@ -7,12 +7,14 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  NotFoundException,
   Param,
   Patch,
   Post,
   Query,
   UploadedFile,
   UseInterceptors,
+  Response,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { SubmissionsService } from './submissions.service';
@@ -26,6 +28,7 @@ import {
 import { join } from 'path';
 import { CreateSubmissionDto } from './dto/create-submission.dto';
 import { UpdateSubmissionDto } from './dto/update-submission.entity';
+import * as fs from 'fs';
 
 @ApiTags('submissions')
 @Controller('submissions')
@@ -86,6 +89,29 @@ export class SubmissionsController {
     }
     removeFile(fullImagePath);
     throw new BadRequestException('File content does not match extension.');
+  }
+
+  @Get('file/:id')
+  @HttpCode(HttpStatus.CREATED)
+  async getFile(@Param('id') id: string, @Response() res) {
+    const submission = await this.submissionsService.findById(id);
+
+    if (!submission) {
+      throw new NotFoundException('Assignment not found');
+    }
+
+    const filePath = join(process.cwd(), 'files/submissions', submission.file);
+
+    // Ensure the file exists
+    if (fs.existsSync(filePath)) {
+      res.setHeader(
+        'Content-Disposition',
+        `attachment; filename="${submission.file}"`,
+      );
+      res.sendFile(filePath);
+    } else {
+      throw new NotFoundException('File not found');
+    }
   }
 
   @Patch(':id')
