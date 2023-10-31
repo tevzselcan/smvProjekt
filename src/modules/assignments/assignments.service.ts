@@ -66,4 +66,11 @@ export class AssignmentsService extends AbstractService {
       relations: ['subject'],
     });
   }
+
+  async findAllAssignmentsForUser(user_id: string): Promise<Assignment[]> {
+    return await this.assignmentsRepository.find({
+      where: { user: { id: user_id } },
+      relations: ['subject'],
+    });
+  }
 }

@@ -63,18 +63,22 @@ export class SubjectsService extends AbstractService {
   }
 
   async findAllSubjectsForStudent(studentId: string): Promise<Subject[]> {
-    return this.subjectsRepository
-      .createQueryBuilder('subject')
-      .innerJoinAndSelect('subject.students', 'student')
-      .where('student.id = :studentId', { studentId })
-      .getMany();
+    return await this.subjectsRepository.find({
+      where: { students: { id: studentId } },
+      relations: ['students'],
+    });
   }
 
   async findAllSubjectsForTeacher(teacherId: string): Promise<Subject[]> {
-    return this.subjectsRepository
-      .createQueryBuilder('subject')
-      .innerJoinAndSelect('subject.teachers', 'teacher')
-      .where('teacher.id = :teacherId', { teacherId })
-      .getMany();
+    return await this.subjectsRepository.find({
+      where: { teachers: { id: teacherId } },
+      relations: ['teachers'],
+    });
+  }
+
+  async findForAll(userId: string): Promise<Subject[]> {
+    return await this.subjectsRepository.find({
+      where: { teachers: { id: userId } } || { students: { id: userId } },
+    });
   }
 }

@@ -18,6 +18,7 @@ import { PerrmissionsGuard } from './permissions/guards/permissions.guard';
 import { SubjectsModule } from './subjects/subjects.module';
 import { AssignmentsModule } from './assignments/assignments.module';
 import { SubmissionsModule } from './submissions/submissions.module';
+import { MeModule } from './me/me.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { SubmissionsModule } from './submissions/submissions.module';
     SubjectsModule,
     AssignmentsModule,
     SubmissionsModule,
+    MeModule,
   ],
   controllers: [],
   providers: [
