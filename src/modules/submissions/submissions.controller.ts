@@ -29,6 +29,8 @@ import { join } from 'path';
 import { CreateSubmissionDto } from './dto/create-submission.dto';
 import { UpdateSubmissionDto } from './dto/update-submission.entity';
 import * as fs from 'fs';
+import { GetCurrentUser } from 'decorators/get-current-user.decorator';
+import { User } from 'entities/user.entity';
 
 @ApiTags('submissions')
 @Controller('submissions')
@@ -40,6 +42,15 @@ export class SubmissionsController {
   @HttpCode(HttpStatus.OK)
   async findOne(@Param('id') id: string): Promise<Submission> {
     return this.submissionsService.findById(id, ['assignment', 'user']);
+  }
+
+  @Post()
+  //@HasPermission('submissions')
+  @HttpCode(HttpStatus.CREATED)
+  async create(
+    @Body() createSubmissionDto: CreateSubmissionDto,
+  ): Promise<Submission> {
+    return this.submissionsService.create(createSubmissionDto);
   }
 
   @Get('assignment/:id')
@@ -60,19 +71,11 @@ export class SubmissionsController {
     return this.submissionsService.findAllAssignmentsForUser(id);
   }
 
-  @Post()
-  //@HasPermission('submissions')
-  @HttpCode(HttpStatus.CREATED)
-  async create(
-    @Body() createSubmissionDto: CreateSubmissionDto,
-  ): Promise<Submission> {
-    return this.submissionsService.create(createSubmissionDto);
-  }
-
   @Post('upload/:id')
   @UseInterceptors(FileInterceptor('file', saveSubmissionFile))
   @HttpCode(HttpStatus.CREATED)
   async uploadsubmission(
+    @GetCurrentUser() user: User,
     @UploadedFile() file: Express.Multer.File,
     @Param('id') id: string,
   ): Promise<Submission> {
@@ -102,7 +105,6 @@ export class SubmissionsController {
 
     const filePath = join(process.cwd(), 'files/submissions', submission.file);
 
-    // Ensure the file exists
     if (fs.existsSync(filePath)) {
       res.setHeader(
         'Content-Disposition',

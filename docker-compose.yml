@@ -1,0 +1,14 @@
+version: "3.9"
+services:
+    api:
+        container_name: smv-projekt-backend
+        build:
+            dockerfile: Dockerfile
+            context: .
+        environment:
+            NODE_ENV: development
+            STAGE: development
+        env_file:
+            - .env.development
+        ports:
+            - "8080:8080"
