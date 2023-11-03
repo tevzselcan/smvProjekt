@@ -31,11 +31,24 @@ import { UpdateSubmissionDto } from './dto/update-submission.entity';
 import * as fs from 'fs';
 import { GetCurrentUser } from 'decorators/get-current-user.decorator';
 import { User } from 'entities/user.entity';
+import { UserData } from 'interfaces/user.interface';
 
 @ApiTags('submissions')
 @Controller('submissions')
 export class SubmissionsController {
   constructor(private submissionsService: SubmissionsService) {}
+
+  @Get()
+  @HttpCode(HttpStatus.OK)
+  async getCurrentUser(@GetCurrentUser() user: User): Promise<UserData> {
+    return {
+      id: user.id,
+      first_name: user.first_name,
+      last_name: user.last_name,
+      email: user.email,
+      role: user.role?.id ? { id: user.role?.id, name: user.role?.name } : null,
+    };
+  }
 
   @Get(':id')
   //@HasPermission('submissions')
