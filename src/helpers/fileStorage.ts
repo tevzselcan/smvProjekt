@@ -33,8 +33,8 @@ export const saveSubmissionFile: Options = {
 
 export const isFileExtensionSafe = (fullFilePath: string): boolean => {
   const ext = extname(fullFilePath).substring(1);
-  const validFileExtensions = ['png', 'jpeg', 'jpg'];
-  return validFileExtensions.includes(ext);
+  const validFileExtensions = ['png', 'jpeg', 'jpg', 'docx', 'pdf'];
+  return validFileExtensions.includes(ext.toLocaleLowerCase());
 };
 
 export const removeFile = (fullFilePath: string): void => {

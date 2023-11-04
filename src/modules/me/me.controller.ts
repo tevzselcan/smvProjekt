@@ -13,10 +13,23 @@ import { UpdateUserDto } from 'modules/users/dto/update-user.dto';
 import { Subject } from 'entities/subject.entity';
 import { Assignment } from 'entities/assignment.entity';
 import { Submission } from 'entities/submission.entity';
+import { UserData } from 'interfaces/user.interface';
 
 @Controller('me')
 export class MeController {
   constructor(private readonly meService: MeService) {}
+
+  @Get()
+  @HttpCode(HttpStatus.OK)
+  async getCurrentUser(@GetCurrentUser() user: User): Promise<UserData> {
+    return {
+      id: user.id,
+      first_name: user.first_name,
+      last_name: user.last_name,
+      email: user.email,
+      role: user.role?.id ? { id: user.role?.id, name: user.role?.name } : null,
+    };
+  }
 
   @Get('subjects')
   @HttpCode(HttpStatus.OK)
