@@ -24,8 +24,9 @@ import {
   isFileExtensionSafe,
   removeFile,
   saveSubmissionFile,
+  renameFile,
 } from 'helpers/fileStorage';
-import { join } from 'path';
+import path, { join } from 'path';
 import { CreateSubmissionDto } from './dto/create-submission.dto';
 import { UpdateSubmissionDto } from './dto/update-submission.entity';
 import * as fs from 'fs';
@@ -74,23 +75,39 @@ export class SubmissionsController {
   @Post('upload/:id')
   @UseInterceptors(FileInterceptor('file', saveSubmissionFile))
   @HttpCode(HttpStatus.CREATED)
-  async uploadsubmission(
+  async uploadSubmission(
     @GetCurrentUser() user: User,
     @UploadedFile() file: Express.Multer.File,
     @Param('id') id: string,
   ): Promise<Submission> {
-    const filename = file?.filename;
+    if (!file || !file.filename) {
+      throw new BadRequestException(
+        'File must be a png, jpg/jpeg, word, or pdf.',
+      );
+    }
 
-    if (!filename)
-      throw new BadRequestException('File must be a png or jpg/jpeg.');
+    const submission = await this.submissionsService.findById(id, [
+      'assignment',
+    ]);
+
+    const originalFileExtension = path.extname(file.filename).toLowerCase();
+    const customFileName =
+      `${user.last_name}-${user.first_name}-${submission.assignment.title}${originalFileExtension}`.replace(
+        /[^a-zA-Z0-9-.]/g,
+        '',
+      );
 
     const imagesFolderPath = join(process.cwd(), 'files/submissions');
-    const fullImagePath = join(imagesFolderPath + '/' + file.filename);
-    if (await isFileExtensionSafe(fullImagePath)) {
-      await this.submissionsService.updateSubmissionFile(id, filename);
+    const originalFilePath = join(imagesFolderPath, file.filename);
+    const customFilePath = join(imagesFolderPath, customFileName);
+
+    if (await isFileExtensionSafe(originalFilePath)) {
+      await renameFile(originalFilePath, customFilePath);
+      await this.submissionsService.updateSubmissionFile(id, customFileName);
       return await this.submissionsService.findById(id);
     }
-    removeFile(fullImagePath);
+
+    removeFile(originalFilePath);
     throw new BadRequestException('File content does not match extension.');
   }
 

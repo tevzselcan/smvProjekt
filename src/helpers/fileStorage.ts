@@ -1,3 +1,5 @@
+import { BadRequestException } from '@nestjs/common';
+import { Submission } from 'entities/submission.entity';
 import { User } from 'entities/user.entity';
 import fs from 'fs';
 import Logging from 'library/Logging';
@@ -21,6 +23,8 @@ export const saveSubmissionFile: Options = {
     destination: './files/submissions',
     filename(req, file, callback) {
       const user: User = req['user'];
+      const submission = req['assignmentTitle'];
+      console.log(submission);
       const uniqueNameSpecial = `${user.last_name}-${user.first_name}`;
       const uniqueName = uniqueNameSpecial.replace(/[^a-zA-Z0-9-]/g, '');
       //const uniqueName = Date.now() + '-' + Math.round(Math.random() * 1e9);
@@ -44,3 +48,18 @@ export const removeFile = (fullFilePath: string): void => {
     Logging.error(error);
   }
 };
+
+export async function renameFile(
+  oldPath: string,
+  newPath: string,
+): Promise<void> {
+  return new Promise<void>((resolve, reject) => {
+    fs.rename(oldPath, newPath, (err) => {
+      if (err) {
+        reject(new BadRequestException('Failed to rename the file.'));
+      } else {
+        resolve();
+      }
+    });
+  });
+}
