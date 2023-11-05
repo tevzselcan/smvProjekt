@@ -69,7 +69,7 @@ export class SubmissionsController {
   async findSubmissionsForAnUser(
     @Param('id') id: string,
   ): Promise<Submission[]> {
-    return this.submissionsService.findAllAssignmentsForUser(id);
+    return this.submissionsService.findAllSubmissionsForUser(id);
   }
 
   @Post('upload/:id')

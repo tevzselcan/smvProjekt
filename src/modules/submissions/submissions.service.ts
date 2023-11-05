@@ -65,10 +65,10 @@ export class SubmissionsService extends AbstractService {
     });
   }
 
-  async findAllAssignmentsForUser(user_id: string): Promise<Submission[]> {
+  async findAllSubmissionsForUser(user_id: string): Promise<Submission[]> {
     return await this.submissionRepository.find({
       where: { user: { id: user_id } },
-      relations: ['user'],
+      relations: ['user', 'assignment'],
     });
   }
 }

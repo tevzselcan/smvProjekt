@@ -31,6 +31,6 @@ export class MeService {
   }
 
   async getUsersSubmissions(user: User): Promise<Submission[]> {
-    return await this.submissionService.findAllAssignmentsForUser(user.id);
+    return await this.submissionService.findAllSubmissionsForUser(user.id);
   }
 }
