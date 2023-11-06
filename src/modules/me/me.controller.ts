@@ -21,14 +21,8 @@ export class MeController {
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  async getCurrentUser(@GetCurrentUser() user: User): Promise<UserData> {
-    return {
-      id: user.id,
-      first_name: user.first_name,
-      last_name: user.last_name,
-      email: user.email,
-      role: user.role?.id ? { id: user.role?.id, name: user.role?.name } : null,
-    };
+  async getCurrentUser(@GetCurrentUser() user: User): Promise<User> {
+    return await this.meService.getLoggedUserInfo(user);
   }
 
   @Get('subjects')

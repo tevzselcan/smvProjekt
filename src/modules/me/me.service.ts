@@ -33,4 +33,8 @@ export class MeService {
   async getUsersSubmissions(user: User): Promise<Submission[]> {
     return await this.submissionService.findAllSubmissionsForUser(user.id);
   }
+
+  async getLoggedUserInfo(user: User): Promise<User> {
+    return await this.userService.findById(user.id, ['role']);
+  }
 }
