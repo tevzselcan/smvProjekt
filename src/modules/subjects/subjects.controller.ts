@@ -16,6 +16,7 @@ import { SubjectsService } from './subjects.service';
 import { HasPermission } from 'decorators/has-permission.decorator';
 import { CreateUpdateSubjectDto } from './dto/create-update-subject.dto';
 import { Subject } from 'entities/subject.entity';
+import { UpdateSubjectDto } from './dto/update-subject.dto';
 
 @ApiTags('subjects')
 @Controller('subjects')
@@ -73,7 +74,7 @@ export class SubjectsController {
   @HttpCode(HttpStatus.OK)
   async update(
     @Param('id') id: string,
-    @Body() updateSubjectDto: CreateUpdateSubjectDto,
+    @Body() updateSubjectDto: UpdateSubjectDto,
     @Body('teachers') teachersIds: string[],
     @Body('students') studentsIds: string[],
   ): Promise<Subject> {

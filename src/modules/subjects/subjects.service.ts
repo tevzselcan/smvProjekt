@@ -10,6 +10,7 @@ import { Repository } from 'typeorm';
 import { CreateUpdateSubjectDto } from './dto/create-update-subject.dto';
 import Logging from 'library/Logging';
 import { User } from 'entities/user.entity';
+import { UpdateSubjectDto } from './dto/update-subject.dto';
 
 @Injectable()
 export class SubjectsService extends AbstractService {
@@ -42,7 +43,7 @@ export class SubjectsService extends AbstractService {
 
   async update(
     subjecId: string,
-    updateSubjectDto: CreateUpdateSubjectDto,
+    updateSubjectDto: UpdateSubjectDto,
     teacherIds: { id: string }[],
     studentIds: { id: string }[],
   ): Promise<Subject> {
