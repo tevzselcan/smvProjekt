@@ -15,4 +15,7 @@ export class Submission extends Base {
 
   @Column({ nullable: true })
   file: string;
+
+  @Column({ nullable: true })
+  grade: string;
 }

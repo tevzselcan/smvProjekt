@@ -41,6 +41,7 @@ export class SubmissionsService extends AbstractService {
       submission.assignment = updateSubmissionsDto.assignment;
       submission.user = updateSubmissionsDto.user;
       submission.file = updateSubmissionsDto.file;
+      submission.grade = updateSubmissionsDto.grade;
 
       return this.submissionRepository.save(submission);
     } catch (error) {

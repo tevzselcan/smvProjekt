@@ -12,4 +12,7 @@ export class UpdateSubmissionDto {
 
   @ApiProperty()
   file?: string;
+
+  @ApiProperty()
+  grade?: string;
 }
