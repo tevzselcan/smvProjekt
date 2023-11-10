@@ -62,7 +62,7 @@ export class SubmissionsService extends AbstractService {
   ): Promise<Submission[]> {
     return await this.submissionRepository.find({
       where: { assignment: { id: assignment_id } },
-      relations: ['assignment'],
+      relations: ['user', 'assignment'],
     });
   }
 
