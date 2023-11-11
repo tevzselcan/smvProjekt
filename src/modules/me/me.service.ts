@@ -22,8 +22,12 @@ export class MeService {
     return await this.userService.update(user.id, updateUserDto);
   }
 
-  async getUserSubjects(user: User): Promise<Subject[]> {
-    return await this.subjectService.findForAll(user.id);
+  async getUserTeacherSubjects(user: User): Promise<Subject[]> {
+    return await this.subjectService.findAllSubjectsForTeacher(user.id);
+  }
+
+  async getUserStudentSubjects(user: User): Promise<Subject[]> {
+    return await this.subjectService.findAllSubjectsForStudent(user.id);
   }
 
   async getUsersAssignments(user: User): Promise<Assignment[]> {

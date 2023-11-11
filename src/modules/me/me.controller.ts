@@ -25,10 +25,20 @@ export class MeController {
     return await this.meService.getLoggedUserInfo(user);
   }
 
-  @Get('subjects')
+  @Get('subjects/teacher')
   @HttpCode(HttpStatus.OK)
-  async getSubjectsForUser(@GetCurrentUser() user: User): Promise<Subject[]> {
-    return this.meService.getUserSubjects(user);
+  async getSubjectsForUserTeacher(
+    @GetCurrentUser() user: User,
+  ): Promise<Subject[]> {
+    return this.meService.getUserTeacherSubjects(user);
+  }
+
+  @Get('subjects/student')
+  @HttpCode(HttpStatus.OK)
+  async getSubjectsForUserStudent(
+    @GetCurrentUser() user: User,
+  ): Promise<Subject[]> {
+    return this.meService.getUserStudentSubjects(user);
   }
 
   @Get('assignments')
