@@ -41,6 +41,28 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
+## ENV files
+
+Create a .env.development or .env.production using this template, based on your stage.
+
+```bash
+# Database
+DATABASE_HOST=
+DATABASE_PORT=
+DATABASE_USERNAME=
+DATABASE_PWD=
+DATABASE_NAME=
+
+# JWT
+JWT_SECRET=
+JWT_SECRET_EXPIRES=
+JWT_REFRESH_SECRET=
+JWT_REFRESH_SECRET_EXPIRES=
+
+#Other
+CORS_ORIGIN=
+```
+
 ## Routes
 
 Route documentation available with [SwaggerUI](https://swagger.io/tools/swagger-ui/) on port 8080.
